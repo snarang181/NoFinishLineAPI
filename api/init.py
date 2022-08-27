@@ -9,9 +9,12 @@ api_key = os.getenv('API_KEY')
 @app.route('/test', methods=['POST'])
 def home():
     data = request.get_json()
+    print(data)
     try:
         if(data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
     except:
         return {"message": "API key required",}, 401
     return {"message": "Hello World!"}
+
+home()
