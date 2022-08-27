@@ -6,7 +6,7 @@ import os, requests, json
 app = Flask(__name__)
 api_key = 'aac48d6f-b63d-47a8-ada0-731db9955679'
 
-@app.route('/', methods=['POST'])
+@app.route('/test', methods=['POST'])
 def home():
     data = request.get_json()
     print(data)
@@ -16,4 +16,5 @@ def home():
     except:
         return {"message": "API key required",}, 401
     return {"message": "Hello World!"}
+
 
