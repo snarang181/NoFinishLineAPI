@@ -4,7 +4,7 @@ from flask_mail import Mail, Message
 import os, requests, json
 
 app = Flask(__name__)
-api_key = os.getenv('API_KEY')
+api_key = 'aac48d6f-b63d-47a8-ada0-731db9955679'
 
 @app.route('/', methods=['POST'])
 def home():
