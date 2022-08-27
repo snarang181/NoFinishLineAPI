@@ -32,7 +32,7 @@ def signup():
     id  = data['id']
     password = data['password']
     status_code, message, auth_token, userid  = user_register(id, password)
-    return {"message": data, "auth_token": auth_token, "userID":str(userid)}, status_code
+    return {"message": message, "auth_token": auth_token, "userID":str(userid)}, status_code
 
     
 
