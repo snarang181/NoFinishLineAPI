@@ -13,16 +13,6 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
 
 
-# @app.route('/test', methods=['POST'])
-# def home():
-#     data = request.get_json()
-#     print(data)
-#     try:
-#         if(data['auth_key'] != api_key):
-#             return {"message": "Invalid API Key",}, 401
-#     except:
-#         return {"message": "API key required",}, 401
-#     return {"message": "Hello World!"}
 
 @app.route('/', methods=['GET'])
 def landing():
@@ -41,6 +31,7 @@ def signup():
     password = data['password']
     status_code, message, auth_token, userid  = user_register(id, password)
     return {"message": data, "auth_token": auth_token, "userID":str(userid)}, status_code
+
     
     # return user_register(data['email'], data['password'])
 
