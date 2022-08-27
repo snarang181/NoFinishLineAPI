@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
-from  user_db_management import user_register
+from  api.user_db_management import user_register
 
 load_dotenv()
 
