@@ -3,6 +3,8 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
+
+
 from api.user_db_management import user_register
 
 load_dotenv()
@@ -16,6 +18,8 @@ AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
 
 @app.route('/', methods=['GET'])
 def landing():
+    data = request.get_json()
+    print(data)
     return {'message': 'Hello, World! This is a private API.'}, 200
 
 @app.route('/user/signup', methods=['POST'])
@@ -33,7 +37,6 @@ def signup():
     return {"message": data, "auth_token": auth_token, "userID":str(userid)}, status_code
 
     
-    # return user_register(data['email'], data['password'])
 
 
 
