@@ -46,7 +46,7 @@ boto3==1.18.20
 datetime==4.3
 passlib==1.7.4
 twilio==7.7.0
-pandas==1.1.5
+pandas<0.21
 numpy==1.19.4
 pygsheets==2.0.5
 PyTikTokAPI==0.0.5
