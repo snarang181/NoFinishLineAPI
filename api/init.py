@@ -6,7 +6,7 @@ import os, requests, json
 app = Flask(__name__)
 api_key = os.getenv('API_KEY')
 
-@app.route('/test', methods=['POST'])
+@app.route('/', methods=['POST'])
 def home():
     data = request.get_json()
     print(data)
