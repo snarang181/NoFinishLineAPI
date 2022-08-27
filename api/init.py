@@ -5,7 +5,7 @@ import os, requests, json
 from dotenv import load_dotenv
 
 
-from api.user_db_management import user_register
+# from api.user_db_management import user_register
 
 load_dotenv()
 
