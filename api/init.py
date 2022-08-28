@@ -32,6 +32,10 @@ def signup():
     
     id  = data['id']
     password = data['password']
+    age = data['age']
+    weight = data['weight']
+    first_name = data['first_name']
+    last_name = data['last_name']
     status_code, message, auth_token, userid  = user_register(id, password)
     return {"message": message, "auth_token": auth_token, "userID":str(userid)}, status_code
 

@@ -38,7 +38,7 @@ def user_exists(id, table):
         else:
             return True
 
-def user_register(id, password, age, weight):
+def user_register(id, password,first_name, last_name, age, weight):
     if (id == None or password == None) or (id == '' or password == ''):
         return 401, "Invalid input", None, None
     
@@ -59,6 +59,8 @@ def user_register(id, password, age, weight):
                 'userid': unique_identification,
                 'email': id,
                 'password': encrypt_password(password,temp_id),
+                'first_name': first_name,
+                'last_name': last_name,
                 'age': age,
                 'weight': weight,
                 'registeration_datetime': time(),
