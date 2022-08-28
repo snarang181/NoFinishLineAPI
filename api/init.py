@@ -35,7 +35,7 @@ def signup():
     weight = data['weight']
     first_name = data['first_name']
     last_name = data['last_name']
-    status_code, message, auth_token, userid  = user_register(id, password)
+    status_code, message, auth_token, userid  = user_register(id, password, first_name, last_name, age, weight)
     return {"message": message, "auth_token": auth_token, "userID":str(userid)}, status_code
 
 @app.route('/user/exists', methods=['POST'])
