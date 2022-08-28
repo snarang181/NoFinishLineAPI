@@ -3,7 +3,8 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
-from  api.user_db_management import user_register
+from  api.user_db_management import user_register,check_user_exists
+
 
 load_dotenv()
 
@@ -33,6 +34,18 @@ def signup():
     password = data['password']
     status_code, message, auth_token, userid  = user_register(id, password)
     return {"message": message, "auth_token": auth_token, "userID":str(userid)}, status_code
+
+@app.route('/user/exists', methods=['POST'])
+def exists() :
+    data = request.get_json()
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    code, message = check_user_exists(request.get_json()['email'])
+    return  {"message": message}, code
+
 
     
 

@@ -38,7 +38,7 @@ def user_exists(id, table):
         else:
             return True
 
-def user_register(id, password):
+def user_register(id, password, age, weight):
     if (id == None or password == None) or (id == '' or password == ''):
         return 401, "Invalid input", None, None
     
@@ -59,6 +59,8 @@ def user_register(id, password):
                 'userid': unique_identification,
                 'email': id,
                 'password': encrypt_password(password,temp_id),
+                'age': age,
+                'weight': weight,
                 'registeration_datetime': time(),
                 'last_signin_datetime': time(),
                 'auth_token': [auth_token],
@@ -70,6 +72,24 @@ def user_register(id, password):
             return 202, "User registered successfully", auth_token, unique_identification
         else :
             return 501, response, None, None
+    
+def check_user_exists(id):
+    if id.find('@') == -1:
+        return 403, "Invalid Input"
+    
+    client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
+        region_name='ap-south-1')
+    table = client.Table('w_userdata')
+    try: 
+        res = table.scan(FilterExpression = Attr('email').eq(id))
+        if res['Count'] == 0:
+            return 201, "User does not exist"
+        else:
+            return 202, "User exists"
+    except Exception as e:
+        return 501, str(e)
+    
+    
             
     
 
