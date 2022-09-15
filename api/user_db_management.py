@@ -57,8 +57,8 @@ def user_register(id, password,first_name, last_name, age, weight):
         response = table.put_item(
             Item = {
                 'userid': unique_identification,
-                'email': id,
-                'password': encrypt_password(password,int(unique_identification)),
+                'email': id.lower(),
+                'password': encrypt_password(str(password),str(unique_identification)),
                 'first_name': first_name,
                 'last_name': last_name,
                 'age': age,
