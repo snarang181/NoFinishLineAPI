@@ -63,7 +63,7 @@ def user_register(id, password,first_name, last_name, age, weight):
                 'last_name': last_name,
                 'age': age,
                 'weight': weight,
-                'registeration_datetime': time(),
+                'registration_datetime': time(),
                 'last_signin_datetime': time(),
                 'auth_token': [auth_token],
                 'one_signal_ids': []

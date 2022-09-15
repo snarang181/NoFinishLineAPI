@@ -47,7 +47,9 @@ def exists() :
     except:
         return {"message": "API key required",}, 401
     code, message = check_user_exists(request.get_json()['email'])
-    return  {"message": message}, code
+    return  {"message": message}, code  
+
+
 
 
     
