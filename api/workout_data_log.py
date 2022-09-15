@@ -73,6 +73,20 @@ def get_single_workout_data(user_id, workout_id):
         return 200, response['Items']
     except Exception as e:
         return 501, str(e)
+
+def remove_workout(user_id, workout_id):
+    client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
+        region_name='ap-south-1')
+    table = client.Table('w_workoutdata')
+    #remove workout from workoutdata table
+    try : 
+        response = table.delete_item(Key = {'userid': user_id, 'workout_id': workout_id})
+        if(response['ResponseMetadata']['HTTPStatusCode']==200):
+            return 200, "Workout removed"
+        else : 
+            return 501, "Error removing workout"
+    except Exception as e:
+        return 501, str(e)
         
     
 def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes):
@@ -110,4 +124,5 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
 # print(workout_log('20852362', 'Strength Training', '50', '400'))
 
 # print(workout_log('20852362', 'Running', '30', '300'))
-print(past_workouts('20852362'))
+# print(past_workouts('20852362'))
+# remove_workout('20852362', '79680243')

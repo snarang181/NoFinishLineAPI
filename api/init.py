@@ -5,7 +5,7 @@ from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
 from  api.user_db_management import user_register,check_user_exists, user_login
-from api.workout_data_log import past_workouts, get_single_workout_data, workout_log
+from api.workout_data_log import past_workouts, get_single_workout_data, workout_log, remove_workout
 
 
 load_dotenv()
@@ -104,6 +104,24 @@ def single_workout_data():
     code, message = get_single_workout_data(user_id, workout_id)
     return {"message": message}, code
 
+@app.route('/user/delete_workout', methods=['POST'])
+def single_workout_data():
+    data = request.get_json()
+    user_id = ''
+    workout_id = ''
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+        workout_id = data['workout_id']
+    except:
+        return {"message": "user_id and workout_id required"}, 400
+    code, message = remove_workout(user_id, workout_id)
+    return {"message": message}, code
+
 @app.route('/user/workout_log', methods=['POST'])
 def log_workout():
     data = request.get_json()
@@ -127,6 +145,8 @@ def log_workout():
         return {"message": "All fields reqd"}, 400
     code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
     return {"message": message}, code
+
+
     
 
 
