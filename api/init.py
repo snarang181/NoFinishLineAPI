@@ -105,7 +105,7 @@ def single_workout_data():
     return {"message": message}, code
 
 @app.route('/user/delete_workout', methods=['POST'])
-def single_workout_data():
+def delete_workout():
     data = request.get_json()
     user_id = ''
     workout_id = ''
