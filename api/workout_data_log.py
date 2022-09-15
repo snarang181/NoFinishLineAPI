@@ -57,8 +57,8 @@ def past_workouts(user_id):
         return 401, "User does not exist"
     try: 
         response = table.scan(FilterExpression = Attr('userid').eq(user_id))
-        print(response)
-        return 200, response['Items']
+        response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
+        return 200, response
     except Exception as e:
         return 501, str(e)
 
@@ -93,7 +93,7 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
             Item = {
                 'userid': str(user_id),
                 'workout_id': str(unique_workout_id(table)),
-                'workout_name': str(workout_name),
+                'workout_name': workout_name[0].upper() + workout_name[1:],
                 'workout_duration': str(workout_duration),
                 'workout_calories_burnt': str(workout_calories_burnt),
                 'workout_date': time(),
@@ -110,4 +110,4 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
 # print(workout_log('20852362', 'Strength Training', '50', '400'))
 
 # print(workout_log('20852362', 'Running', '30', '300'))
-# print(past_workouts('20852362'))
+print(past_workouts('20852362'))
