@@ -119,6 +119,7 @@ def user_login(id, password):
         return 200, "Successfully logged in", auth_token, userid
     else: 
         return 401, "Invalid password", None, None
+
     
 def verify_auth_token(id, token):
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
