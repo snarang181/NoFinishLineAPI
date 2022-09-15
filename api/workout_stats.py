@@ -24,8 +24,31 @@ def get_results_within(list, days):
     filtered = [i for i in list if datetime.strptime(i['workout_date'], "%d/%m/%Y %H:%M:%S EST") > time_diff]
     return filtered
 
-#Total Calories burned in seven days and avg over 30 days 
-def calorie_stats(user_id): 
+def get_last_month_prop(list):
+    last_month_exe = {}
+    for w in list: 
+        if w['workout_name'] in last_month_exe:
+                last_month_exe[w['workout_name']] += 1
+        else:
+                last_month_exe[w['workout_name']] = 1
+    last_month_exe = {k: v/len(list) for k, v in last_month_exe.items()}
+    last_month_exe = {k: v for k, v in sorted(last_month_exe.items(), key=lambda item: item[1], reverse=True)}
+    return last_month_exe
+
+def get_rest_days_month(list):
+    rest_day_count = 0
+    for i in range(30):
+        day = datetime.strptime(time(), "%d/%m/%Y %H:%M:%S EST") - timedelta(days=i)
+        day = day.strftime("%d/%m/%Y")
+        for d in list:
+            workout = datetime.strptime(d['workout_date'], "%d/%m/%Y %H:%M:%S EST")
+            workout = workout.strftime("%d/%m/%Y")
+            if day == workout:
+                rest_day_count += 1
+    return rest_day_count
+            
+
+def workout_stats(user_id): 
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_workoutdata')
@@ -34,9 +57,13 @@ def calorie_stats(user_id):
         response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
         within_week = get_results_within(response, 7)
         within_month = get_results_within(response, 30)
-        
-        return 200, response
+        avg_week_calories = sum([int(i['workout_calories_burnt']) for i in within_week])/len(within_week)
+        avg_weeek_minutes = sum([int(i['workout_duration']) for i in within_week])/len(within_week)
+        dominating_workout_week = max(set([i['workout_name'] for i in within_week]), key = [i['workout_duration'] for i in within_week].count)
+        last_month_exe = get_last_month_prop(within_month)
+        rest_days = get_rest_days_month(within_month)
+        return 200, {'avg_week_calories': avg_week_calories, 'avg_week_minutes': avg_weeek_minutes, 'dominating_workout_week': dominating_workout_week, 'last_month_exe_prop': last_month_exe, 'rest_days': rest_days}
     except Exception as e:
         return 501, str(e)
 
-print(calorie_stats('20852362'))
+print(workout_stats('20852362'))
