@@ -1,9 +1,11 @@
+from email import message
 from flask import Flask, request, render_template
 from flask_cors import CORS
 from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
 from  api.user_db_management import user_register,check_user_exists
+from api.workout_data_log import past_workouts, get_single_workout_data, workout_log
 
 
 load_dotenv()
@@ -48,6 +50,54 @@ def exists() :
         return {"message": "API key required",}, 401
     code, message = check_user_exists(request.get_json()['email'])
     return  {"message": message}, code  
+
+@app.route('/user/past_workouts', methods=['POST'])
+def past_workouts_route():
+    data = request.get_json()
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    code, message = past_workouts(request.get_json()['user_id'])
+    return  {"message": message}, code
+
+@app.route('/user/single_workout', methods=['POST'])
+def single_workout_data():
+    data = request.get_json()
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+        workout_id = data['workout_id']
+    except:
+        return {"message": "user_id and workout_id required"}, 400
+    
+    code, message = get_single_workout_data(user_id, workout_id)
+    return {"message": message}, code
+
+@app.route('/user/workout_log', methods=['POST'])
+def log_workout():
+    data = request.get_json()
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+        workout_name = data['workout_name']
+        workout_duration = data['workout_duration']
+        workout_calories_burnt = data['workout_calories_burnt']
+    except:
+        return {"message": "All fields reqd"}, 400
+    code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt)
+    
+
+
 
 
 
