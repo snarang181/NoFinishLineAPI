@@ -52,7 +52,7 @@ def exists() :
     return  {"message": message}, code  
 
 @app.route('/user/login', methods=['POST'])
-def user_login() :
+def user_login_app() :
     data = request.get_json()
     user_id = ''
     try:
