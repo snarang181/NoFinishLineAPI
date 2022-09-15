@@ -75,7 +75,7 @@ def get_single_workout_data(user_id, workout_id):
         return 501, str(e)
         
     
-def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt):
+def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes):
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_workoutdata')
@@ -96,7 +96,8 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt)
                 'workout_name': str(workout_name),
                 'workout_duration': str(workout_duration),
                 'workout_calories_burnt': str(workout_calories_burnt),
-                'workout_date': time()
+                'workout_date': time(),
+                'workout_notes': str(workout_notes)
             }
         )
         if(response['ResponseMetadata']['HTTPStatusCode']==200):
@@ -106,6 +107,7 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt)
     except Exception as e:
         return 501, str(e)
 
-# print(workout_log('66932846', 'traditional', '50', '400'))
+# print(workout_log('20852362', 'Strength Training', '50', '400'))
 
-# print(workout_log('66932846', 'running', '30', '300'))
+# print(workout_log('20852362', 'Running', '30', '300'))
+# print(past_workouts('20852362'))

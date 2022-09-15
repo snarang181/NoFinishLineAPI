@@ -111,6 +111,7 @@ def log_workout():
     workout_name = ''
     workout_calories_burnt = ''
     workout_duration = ''
+    workout_notes = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
@@ -121,9 +122,10 @@ def log_workout():
         workout_name = data['workout_name']
         workout_duration = data['workout_duration']
         workout_calories_burnt = data['workout_calories_burnt']
+        workout_notes = data['workout_notes']
     except:
         return {"message": "All fields reqd"}, 400
-    code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt)
+    code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
     return {"message": message}, code
     
 
