@@ -58,7 +58,7 @@ def user_register(id, password,first_name, last_name, age, weight):
             Item = {
                 'userid': unique_identification,
                 'email': id,
-                'password': encrypt_password(password,temp_id),
+                'password': encrypt_password(password,int(unique_identification)),
                 'first_name': first_name,
                 'last_name': last_name,
                 'age': age,
@@ -78,7 +78,6 @@ def user_register(id, password,first_name, last_name, age, weight):
 def check_user_exists(id):
     if id.find('@') == -1:
         return 403, "Invalid Input"
-    
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_userdata')
@@ -90,6 +89,51 @@ def check_user_exists(id):
             return 202, "User exists"
     except Exception as e:
         return 501, str(e)
+
+def verify_password(id,password,table):
+    res = table.scan(FilterExpression = Attr('email').eq(id))
+    return decrypt_password(password, res['Items'][0]['userid'], res['Items'][0]['password']), res['Items'][0]['userid'] 
+
+
+def user_login(id, password):
+    email = 'EMPTY'
+    client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
+        region_name='ap-south-1')
+    table = client.Table('w_userdata')
+    if(not user_exists(id,table)):
+        return 403, "User does not exist", None, None
+    flag, userid = verify_password(id,password,table)
+    if flag: 
+        auth_token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(25))
+        response = table.update_item(
+                Key={
+                    'userid': userid
+                },
+                UpdateExpression="set last_signin_datetime = :val1, auth_token = list_append(auth_token, :val2)",
+                 ExpressionAttributeValues={
+                    ':val1': time(),
+                    ':val2': [auth_token]
+                },
+                ReturnValues="UPDATED_NEW"
+                )
+        return 200, "Successfully logged in", auth_token, userid
+    else: 
+        return 401, "Invalid password", None, None
+    
+def verify_auth_token(id, token):
+    client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
+        region_name='ap-south-1')
+    table = client.Table('w_userdata')
+    res = table.scan(FilterExpression = Attr('userid').eq(str(id)))
+    if(res['Count']==0):
+        return 403, "User does not exist"
+    else:
+        if(token in res['Items'][0]['auth_token']):
+            return 200, "Token verified"
+        else:
+            return 401, "Invalid token"
+        
+    
     
     
             

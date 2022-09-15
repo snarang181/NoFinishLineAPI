@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
-from  api.user_db_management import user_register,check_user_exists
+from  api.user_db_management import user_register,check_user_exists, user_login
 from api.workout_data_log import past_workouts, get_single_workout_data, workout_log
 
 
@@ -51,20 +51,45 @@ def exists() :
     code, message = check_user_exists(request.get_json()['email'])
     return  {"message": message}, code  
 
-@app.route('/user/past_workouts', methods=['POST'])
-def past_workouts_route():
+@app.route('/user/login', methods=['POST'])
+def user_login() :
     data = request.get_json()
+    user_id = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
     except:
         return {"message": "API key required",}, 401
-    code, message = past_workouts(request.get_json()['user_id'])
+    try:
+        user_id = data['user_id']
+        password = data['password']
+    except:
+        return {"message": "Invalid input"}, 401
+    code, data, auth_token, id = user_login(data['user_id'].lower(), data['password'])
+    return {"message": data, "auth_token": auth_token, "userID":str(id)}, code
+        
+
+@app.route('/user/past_workouts', methods=['POST'])
+def past_workouts_route():
+    data = request.get_json()
+    user_id = ''
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+    except:
+        return {"message": "User ID required"}, 401
+    code, message = past_workouts(user_id)
     return  {"message": message}, code
 
 @app.route('/user/single_workout', methods=['POST'])
 def single_workout_data():
     data = request.get_json()
+    user_id = ''
+    workout_id = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
@@ -82,6 +107,10 @@ def single_workout_data():
 @app.route('/user/workout_log', methods=['POST'])
 def log_workout():
     data = request.get_json()
+    user_id = ''
+    workout_name = ''
+    workout_calories_burnt = ''
+    workout_duration = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
@@ -95,6 +124,7 @@ def log_workout():
     except:
         return {"message": "All fields reqd"}, 400
     code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt)
+    return {"message": message}, code
     
 
 
