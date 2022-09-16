@@ -5,7 +5,7 @@ from flask_mail import Mail, Message
 import os, requests, json
 from dotenv import load_dotenv
 from  api.user_db_management import user_register,check_user_exists, user_login
-from api.workout_data_log import past_workouts, get_single_workout_data, workout_log, remove_workout
+from api.workout_data_log import past_workouts, get_single_workout_data, workout_log, remove_workout, update_workout
 from api.workout_stats import get_workout_stats
 
 
@@ -122,6 +122,31 @@ def delete_workout():
         return {"message": "user_id and workout_id required"}, 400
     code, message = remove_workout(user_id, workout_id)
     return {"message": message}, code
+
+@app.route('/user/update_workout', methods=['POST'])
+def update_workout():
+    data = request.get_json()
+    user_id = ''
+    workout_id = ''
+    workout_name = ''
+    workout_calories_burnt = ''
+    workout_duration = ''
+    workout_notes = ''
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+        workout_id = data['workout_id']
+        workout_name = data['workout_name']
+        workout_duration = data['workout_duration']
+        workout_calories_burnt = data['workout_calories_burnt']
+        workout_notes = data['workout_notes']
+        code, message = update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
+    except:
+        return {"message": "All fields reqd"}, 400
 
 @app.route('/user/workout_log', methods=['POST'])
 def log_workout():

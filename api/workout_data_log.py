@@ -120,6 +120,41 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
             return 402, "Workout not logged"
     except Exception as e:
         return 501, str(e)
+    
+def update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes):
+    client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
+        region_name='ap-south-1')
+    table = client.Table('w_workoutdata')
+    if user_id == None or  workout_name == None or workout_duration == None or workout_calories_burnt == None:
+        return 401, "Invalid input"
+    
+    if user_id == '' or  workout_name == '' or workout_duration == '' or workout_calories_burnt == '':
+        return 401, "Invalid input"
+    
+    if user_exists(user_id, table):
+        return 401, "User does not exist"
+    try: 
+        response = table.update_item(
+            Key = { 
+                    'userid': user_id,
+                    'workout_id': workout_id     
+                   },
+            UpdateExpression = "set workout_name = :n, workout_duration = :d, workout_calories_burnt = :c, workout_notes = :no",
+            ExpressionAttributeValues={
+                ':n': workout_name,
+                ':d': workout_duration,
+                ':c': workout_calories_burnt,
+                ':no': workout_notes
+            },
+            ReturnValues="UPDATED_NEW"
+        )
+        if(response['ResponseMetadata']['HTTPStatusCode']==200):
+            return 200, "Workout updated successfully"
+        else:
+            return 402, "Workout not updated"
+    except Exception as e:
+        return 501, str(e)
+        
 
 # print(workout_log('20852362', 'Strength Training', '50', '400'))
 
