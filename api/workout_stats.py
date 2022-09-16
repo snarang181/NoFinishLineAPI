@@ -75,4 +75,4 @@ def get_workout_stats(user_id):
     except Exception as e:
         return 501, str(e)
 
-print(get_workout_stats('20852362'))
+# print(get_workout_stats('20852362'))

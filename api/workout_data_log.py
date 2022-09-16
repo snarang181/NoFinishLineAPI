@@ -160,7 +160,7 @@ def update_workout(user_id, workout_id, workout_name, workout_duration, workout_
     except Exception as e:
         return 501, str(e)
         
-print(update_workout('20852362', '21675436', 'Elliptical', '60', '600', ''))
+# print(update_workout('20852362', '21675436', 'Elliptical', '60', '600', ''))
 # print(workout_log('20852362', 'Strength Training', '50', '400'))
 
 # print(workout_log('20852362', 'Running', '30', '300'))
