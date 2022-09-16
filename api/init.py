@@ -6,6 +6,7 @@ import os, requests, json
 from dotenv import load_dotenv
 from  api.user_db_management import user_register,check_user_exists, user_login
 from api.workout_data_log import past_workouts, get_single_workout_data, workout_log, remove_workout
+from api.workout_stats import get_workout_stats
 
 
 load_dotenv()
@@ -146,6 +147,21 @@ def log_workout():
     code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
     return {"message": message}, code
 
+@app.route('/user/workout_stats', methods=['POST'])
+def workout_stats():
+    data = request.get_json()
+    user_id = ''
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        user_id = data['user_id']
+    except: 
+        return {"message": "user_id required"}, 400
+    code, message = get_workout_stats(user_id)
+    return {"message": message}, code
 
     
 

@@ -48,7 +48,7 @@ def get_rest_days_month(list):
     return rest_day_count
             
 
-def workout_stats(user_id): 
+def get_workout_stats(user_id): 
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_workoutdata')
@@ -66,4 +66,4 @@ def workout_stats(user_id):
     except Exception as e:
         return 501, str(e)
 
-print(workout_stats('20852362'))
+# print(workout_stats('20852362'))
