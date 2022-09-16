@@ -147,8 +147,10 @@ def update_workout():
         workout_notes = data['workout_notes']
         code, message = update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
         return {"message": message}, code
-    except:
-        return {"message": "All fields reqd"}, 400
+    # except:
+    #     return {"message": "All fields reqd"}, 400
+    except Exception as e:
+        return {"message": str(e)}, 400
 
 @app.route('/user/workout_log', methods=['POST'])
 def log_workout():
