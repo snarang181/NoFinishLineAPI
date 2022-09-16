@@ -56,7 +56,7 @@ def get_workout_stats(user_id):
     try: 
         response = table.scan(FilterExpression = Attr('userid').eq(user_id))
         if response['Count'] == 0:
-            return {'total_workouts' : 0,'avg_week_calories':0, 'avg_week_minutes': 0, 'dominating_workout_week': '', 'last_month_exe_prop': '', 'rest_days': 0}
+            return 201, {'total_workouts' : 0,'avg_week_calories':0, 'avg_week_minutes': 0, 'dominating_workout_week': '', 'last_month_exe_prop': '', 'rest_days': 0}
         else:
             response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
             within_week = get_results_within(response, 7)
@@ -75,4 +75,4 @@ def get_workout_stats(user_id):
     except Exception as e:
         return 501, str(e)
 
-# print(get_workout_stats('20852362'))
+print(get_workout_stats('20852362'))
