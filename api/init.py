@@ -144,7 +144,8 @@ def user_update_workout():
         workout_duration = data['workout_duration']
         workout_calories_burnt = data['workout_calories_burnt']
         workout_notes = data['workout_notes']
-        code, message = update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
+        workout_date = data['workout_date']
+        code, message = update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes, workout_date)
         return {"message": message}, code
     except Exception as e:
         return {"message": str(e)}, 400

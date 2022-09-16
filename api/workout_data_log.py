@@ -125,7 +125,7 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
     except Exception as e:
         return 501, str(e)
     
-def update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes):
+def update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes, workout_date):
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_workoutdata')
@@ -143,13 +143,14 @@ def update_workout(user_id, workout_id, workout_name, workout_duration, workout_
                     'userid': user_id,
                     'workout_id': workout_id     
                    },
-            UpdateExpression = "set workout_name = :n, workout_duration = :d, workout_calories_burnt = :c, workout_notes = :no",
+            UpdateExpression = "set workout_name = :n, workout_duration = :d, workout_calories_burnt = :c, workout_notes = :no, workout_date = :t",
             ExpressionAttributeValues={
                 ':n': workout_name,
                 ':d': workout_duration,
                 ':c': workout_calories_burnt,
-                ':no': workout_notes
-            },
+                ':no': workout_notes,
+                ":t": workout_date 
+            }, 
             ReturnValues="UPDATED_NEW"
         )
         if(response['ResponseMetadata']['HTTPStatusCode']==200):
@@ -159,9 +160,9 @@ def update_workout(user_id, workout_id, workout_name, workout_duration, workout_
     except Exception as e:
         return 501, str(e)
         
-# print(update_workout('20852362', '62599712', 'Elliptical', '60', '600', ''))
+print(update_workout('20852362', '21675436', 'Elliptical', '60', '600', ''))
 # print(workout_log('20852362', 'Strength Training', '50', '400'))
 
 # print(workout_log('20852362', 'Running', '30', '300'))
-print(past_workouts('20852362'))
+# print(past_workouts('20852362'))
 # remove_workout('20852362', '79680243')
