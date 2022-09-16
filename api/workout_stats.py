@@ -55,21 +55,24 @@ def get_workout_stats(user_id):
     table = client.Table('w_workoutdata')
     try: 
         response = table.scan(FilterExpression = Attr('userid').eq(user_id))
-        response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
-        within_week = get_results_within(response, 7)
-        within_month = get_results_within(response, 30)
-        avg_week_calories = int(sum([int(i['workout_calories_burnt']) for i in within_week])/len(within_week))
-        avg_weeek_minutes = int(sum([int(i['workout_duration']) for i in within_week])/len(within_week))
-        #get last week's most frequent exercise in workout_duration
-        dominant = {'workout_name' : '', 'workout_duration' : 0}
-        for i in within_week:
-            if int(i['workout_duration']) > int(dominant['workout_duration']):
-                dominant['workout_name'] = i['workout_name']
-                dominant['workout_duration'] = i['workout_duration']
-        last_month_exe = get_last_month_prop(within_month)
-        rest_days = int(get_rest_days_month(within_month))
+        if response['Count'] == 0:
+            return {'total_workouts' : 0,'avg_week_calories':0, 'avg_week_minutes': 0, 'dominating_workout_week': '', 'last_month_exe_prop': '', 'rest_days': 0}
+        else:
+            response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
+            within_week = get_results_within(response, 7)
+            within_month = get_results_within(response, 30)
+            avg_week_calories = int(sum([int(i['workout_calories_burnt']) for i in within_week])/len(within_week))
+            avg_weeek_minutes = int(sum([int(i['workout_duration']) for i in within_week])/len(within_week))
+            #get last week's most frequent exercise in workout_duration
+            dominant = {'workout_name' : '', 'workout_duration' : 0}
+            for i in within_week:
+                if int(i['workout_duration']) > int(dominant['workout_duration']):
+                    dominant['workout_name'] = i['workout_name']
+                    dominant['workout_duration'] = i['workout_duration']
+            last_month_exe = get_last_month_prop(within_month)
+            rest_days = int(get_rest_days_month(within_month))
         return 200, {'total_workouts' : len(within_week),'avg_week_calories': int(avg_week_calories), 'avg_week_minutes': avg_weeek_minutes, 'dominating_workout_week': dominant['workout_name'], 'last_month_exe_prop': last_month_exe, 'rest_days': int(rest_days)}
     except Exception as e:
         return 501, str(e)
 
-print(get_workout_stats('20852362'))
+# print(get_workout_stats('20852362'))
