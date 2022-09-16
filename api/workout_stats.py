@@ -31,7 +31,6 @@ def get_last_month_prop(list):
                 last_month_exe[w['workout_name']] += 1
         else:
                 last_month_exe[w['workout_name']] = 1
-    last_month_exe = {k: v/len(list) for k, v in last_month_exe.items()}
     last_month_exe = {k: v for k, v in sorted(last_month_exe.items(), key=lambda item: item[1], reverse=True)}
     return last_month_exe
 
