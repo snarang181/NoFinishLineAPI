@@ -124,7 +124,7 @@ def delete_workout():
     return {"message": message}, code
 
 @app.route('/user/update_workout', methods=['POST'])
-def update_workout():
+def user_update_workout():
     data = request.get_json()
     user_id = ''
     workout_id = ''
@@ -138,7 +138,6 @@ def update_workout():
     except:
         return {"message": "API key required",}, 401
     try:
-        print(data)
         user_id = data['user_id']
         workout_id = data['workout_id']
         workout_name = data['workout_name']
@@ -147,8 +146,6 @@ def update_workout():
         workout_notes = data['workout_notes']
         code, message = update_workout(user_id, workout_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
         return {"message": message}, code
-    # except:
-    #     return {"message": "All fields reqd"}, 400
     except Exception as e:
         return {"message": str(e)}, 400
 
