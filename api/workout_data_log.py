@@ -59,7 +59,7 @@ def past_workouts(user_id):
         response = table.scan(FilterExpression = Attr('userid').eq(user_id))
         print(response['Items'])
         if response['Count'] == 0:
-            return 201, []
+            return 200, []
         else:  
             response = sorted(response['Items'], key = lambda i: i['workout_date'], reverse=True)
         return 200, response
