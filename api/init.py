@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from  api.user_db_management import user_register,check_user_exists, user_login
 from api.workout_data_log import past_workouts, get_single_workout_data, workout_log, remove_workout, update_workout
 from api.workout_stats import get_workout_stats
+from api.individual_workout_data import send_data
+
 
 
 load_dotenv()
@@ -190,7 +192,21 @@ def workout_stats():
     code, message = get_workout_stats(user_id)
     return {"message": message}, code
 
-    
+@app.route('user/workout_details', methods=['POST'])
+def workout_details():
+    data = request.get_json()
+    workout_name = ''
+    try:
+        if (data['auth_key'] != api_key):
+            return {"message": "Invalid API Key",}, 401
+    except:
+        return {"message": "API key required",}, 401
+    try:
+        workout_name = data['workout_name']
+    except: 
+        return {"message": "Workout nmae required"}, 400
+    code, message = send_data(workout_name)
+    return {"message": message}, code
 
 
 
