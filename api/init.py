@@ -192,7 +192,7 @@ def workout_stats():
     code, message = get_workout_stats(user_id)
     return {"message": message}, code
 
-@app.route('user/workout_details', methods=['POST'])
+@app.route('/user/workout_details', methods=['POST'])
 def workout_details():
     data = request.get_json()
     workout_name = ''
