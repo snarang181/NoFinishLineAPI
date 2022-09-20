@@ -16,7 +16,6 @@ def get_workout_data(workout_name):
                 muscle_groups += m.title() + ', '
             for s in workout['secondaryMuscles']:
                 muscle_groups += s.title() + ', '
-            # Remove the last comma and space
             muscle_groups = muscle_groups.strip()
             muscle_groups = muscle_groups[:-1]
             data['Muscle Groups'] = muscle_groups.strip()
@@ -34,4 +33,3 @@ def send_data(workout_name):
         return 404, "Workout not found"
     return 200, workout_data
 
-print(send_data('Spinal Stretch'))
