@@ -16,12 +16,15 @@ def get_workout_data(workout_name):
                 muscle_groups += m.title() + ', '
             for s in workout['secondaryMuscles']:
                 muscle_groups += s.title() + ', '
-            data['Muscle Groups'] = muscle_groups.trim()
+            # Remove the last comma and space
+            muscle_groups = muscle_groups.strip()
+            muscle_groups = muscle_groups[:-1]
+            data['Muscle Groups'] = muscle_groups.strip()
             data['category'] = workout['category'].title()
             instructions = ''
             for i in workout['instructions']:
                 instructions += i + ' '
-            data['instructions'] = instructions.trim()
+            data['instructions'] = instructions.strip()
             return 200, data
     return 404, "Workout not found"
 
@@ -30,3 +33,5 @@ def send_data(workout_name):
     if code == 404: 
         return 404, "Workout not found"
     return 200, workout_data
+
+print(send_data('Spinal Stretch'))
