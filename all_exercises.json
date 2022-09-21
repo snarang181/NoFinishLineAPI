@@ -1,4 +1,32 @@
-[{
+[
+  
+  {
+    "name": "Calisthenics", 
+    "force": null, 
+    "level" : "arbitrary",
+    "mechanic" : null, 
+    "equipment" : "Bodyweight", 
+    "primaryMuscles": [
+      "Arbitrary"
+    ],
+    "secondaryMuscles": [],
+    "instructions" : "arbitrary body weight exercises, focusing on mobility, strength, and endurance",
+    "category": "strength"
+  },
+  {
+    "name": "Weight Training", 
+    "force": null, 
+    "level" : "arbitrary",
+    "mechanic" : null, 
+    "equipment" : "Weights", 
+    "primaryMuscles": [
+      "Arbitrary"
+    ],
+    "secondaryMuscles": [],
+    "instructions" : "arbitrary  weighted exercises, focusing on building strength and size",
+    "category": "strength"
+  },
+  {
   "name": "Internal Rotation with Band",
   "force": null,
   "level": "beginner",
