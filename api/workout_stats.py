@@ -79,6 +79,7 @@ def get_workout_stats(user_id):
                 dominant = {'workout_name' : '', 'workout_duration' : 0}
                 last_month_exe = {}
                 rest_days = 0
+                return 202, {'total_workouts' : len(within_week),'avg_week_calories': int(avg_week_calories), 'avg_week_minutes': avg_weeek_minutes, 'dominating_workout_week': dominant['workout_name'], 'last_month_exe_prop': last_month_exe, 'rest_days': int(rest_days)}
         return 200, {'total_workouts' : len(within_week),'avg_week_calories': int(avg_week_calories), 'avg_week_minutes': avg_weeek_minutes, 'dominating_workout_week': dominant['workout_name'], 'last_month_exe_prop': last_month_exe, 'rest_days': int(rest_days)}
     except Exception as e:
         return 501, str(e)
