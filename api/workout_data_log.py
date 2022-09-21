@@ -93,7 +93,7 @@ def remove_workout(user_id, workout_id):
         return 501, str(e)
         
     
-def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes):
+def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes, workout_date):
     client = boto3.resource('dynamodb', aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'), aws_secret_access_key = os.getenv('AWS_SECRET_KEY'),
         region_name='ap-south-1')
     table = client.Table('w_workoutdata')
@@ -114,8 +114,8 @@ def workout_log(user_id, workout_name, workout_duration, workout_calories_burnt,
                 'workout_name': workout_name[0].upper() + workout_name[1:],
                 'workout_duration': str(workout_duration),
                 'workout_calories_burnt': str(workout_calories_burnt),
-                'workout_date': time(),
-                'workout_notes': str(workout_notes)
+                'workout_notes': str(workout_notes),
+                'workout_date': str(workout_date)
             }
         )
         if(response['ResponseMetadata']['HTTPStatusCode']==200):

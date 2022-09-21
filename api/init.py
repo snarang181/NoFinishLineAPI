@@ -134,6 +134,7 @@ def user_update_workout():
     workout_calories_burnt = ''
     workout_duration = ''
     workout_notes = ''
+    workout_date = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
@@ -160,6 +161,7 @@ def log_workout():
     workout_calories_burnt = ''
     workout_duration = ''
     workout_notes = ''
+    workout_date = ''
     try:
         if (data['auth_key'] != api_key):
             return {"message": "Invalid API Key",}, 401
@@ -171,9 +173,10 @@ def log_workout():
         workout_duration = data['workout_duration']
         workout_calories_burnt = data['workout_calories_burnt']
         workout_notes = data['workout_notes']
+        workout_date = data['workout_date']
     except:
         return {"message": "All fields reqd"}, 400
-    code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes)
+    code, message = workout_log(user_id, workout_name, workout_duration, workout_calories_burnt, workout_notes, workout_date)
     return {"message": message}, code
 
 @app.route('/user/workout_stats', methods=['POST'])
