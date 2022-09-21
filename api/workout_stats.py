@@ -16,12 +16,12 @@ load_dotenv()
 def time():
     timeZ_Ny = pytz.timezone('America/New_York')
     now = datetime.now(timeZ_Ny)
-    return now.strftime("%d/%m/%Y %H:%M:%S EST")
+    return now.strftime("%m/%d/%Y")
 
 def get_results_within(list, days):
     today = time()
-    time_diff = datetime.strptime(today, "%d/%m/%Y %H:%M:%S EST") - timedelta(days=days)
-    filtered = [i for i in list if datetime.strptime(i['workout_date'], "%d/%m/%Y %H:%M:%S EST") > time_diff]
+    time_diff = datetime.strptime(today, "%m/%d/%Y") - timedelta(days=days)
+    filtered = [i for i in list if datetime.strptime(i['workout_date'], "%m/%d/%Y") > time_diff]
     return filtered
 
 def get_last_month_prop(list):
@@ -39,11 +39,11 @@ def get_last_month_prop(list):
 def get_rest_days_month(list):
     rest_day_count = 0
     for i in range(30):
-        day = datetime.strptime(time(), "%d/%m/%Y %H:%M:%S EST") - timedelta(days=i)
-        day = day.strftime("%d/%m/%Y")
+        day = datetime.strptime(time(), "%m/%d/%Y") - timedelta(days=i)
+        day = day.strftime("%m/%d/%Y")
         for d in list:
-            workout = datetime.strptime(d['workout_date'], "%d/%m/%Y %H:%M:%S EST")
-            workout = workout.strftime("%d/%m/%Y")
+            workout = datetime.strptime(d['workout_date'], "%m/%d/%Y")
+            workout = workout.strftime("%m/%d/%Y")
             if day == workout:
                 rest_day_count += 1
     return rest_day_count

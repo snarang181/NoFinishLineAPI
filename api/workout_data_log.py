@@ -15,7 +15,7 @@ load_dotenv()
 def time():
     timeZ_Ny = pytz.timezone('America/New_York')
     now = datetime.now(timeZ_Ny)
-    return now.strftime("%d/%m/%Y %H:%M:%S EST")
+    return now.strftime("%m/%d/%Y")
 
 def user_exists(id, table):
     if id != '':
