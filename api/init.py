@@ -23,7 +23,7 @@ AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
 @app.route('/', methods=['GET'])
 def landing():
     data = request.get_json()
-    return {'message': 'Hello, World! This is a private API.'}, 200
+    return {'message': 'Hello, World! This is a private API used by the NoFinishLine App.'}, 200
 
 @app.route('/user/signup', methods=['POST'])
 def signup():
