@@ -57,7 +57,6 @@ def past_workouts(user_id):
         return 401, "User does not exist"
     try: 
         response = table.scan(FilterExpression = Attr('userid').eq(user_id))
-        print(response['Items'])
         if response['Count'] == 0:
             return 200, []
         else:  
